@@ -1,19 +1,13 @@
 var userSentence = "";
 var result = "";
-var sentenceStrip = "";
-var searchTerm = /\W\s*/g;
-var column = 0;
-var outputArray = [];
-var finalArray = [];
-
-
 
 var encryptSentence = function(string) {
-  sentenceStrip = userSentence.toLowerCase().replace(searchTerm,"");
+  var sentenceStrip = userSentence.toLowerCase().replace(/\W\s*/g,"");
   var sentenceStripLength = sentenceStrip.length;
-  column = Math.ceil(Math.pow(sentenceStripLength,0.5));
+  var column = Math.ceil(Math.pow(sentenceStripLength,0.5));
 
   var moveIndex = 0;
+  var outputArray = [];
 
   for (var index = 0; index < column; index++) {
     for (var i = moveIndex; i < sentenceStripLength; i += column) {
@@ -22,20 +16,15 @@ var encryptSentence = function(string) {
     moveIndex++;
   }
 
+  var outputString = outputArray.join("");
+
+  var finalArray = outputString.match(/.{1,5}/g);
+
+  var finalString = finalArray.join(" ");
+
+  result = finalString;
 
 
-  finalArray = outputArray.map(function(letter) {
-    if ((outputArray.indexOf(letter)%column === 0)&&(outputArray.indexOf(letter)>0)) {
-      return " " + letter;
-    } else {
-      return letter;
-    }
-  });
-
-
-
-
-  result = finalArray.join("");
   return result;
 }
 
@@ -47,6 +36,7 @@ $(document).ready(function(){
     encryptSentence(userSentence);
 
     $("p#showEncrypt").text(result);
+
 
     event.preventDefault();
   });
